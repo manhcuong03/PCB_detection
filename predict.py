@@ -8,7 +8,7 @@ weight = 'best.pt'
 model = YOLO(weight)
 
 # Predict on the image
-results = model.predict('PCBA_26_jpg.rf.689545ff50b6f13b6007401f1f6dd48f.jpg', show=False, save=True, save_dir='output')
+results = model.predict('test2.jpg', show=False, save=True, save_dir='output')
 
 # Process and extract results
 for result in results:
