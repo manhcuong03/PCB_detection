@@ -9,6 +9,8 @@ from ultralytics import YOLO
 import cv2
 import time
 import os
+from serial_communication import ArduinoSerial
+from plc import SiemensPLC
 class UI():
     def __init__(self):
         self.mainUI = QMainWindow()
@@ -18,7 +20,23 @@ class UI():
         self.loginHandle = LOGIN_HANDLE(self.loginUI)
         self.loginHandle.btnLogin.clicked.connect(lambda: self.loadMainForm(0))
         self.loginUI.show()
-        
+        # arduino ------------------------------------------------
+        self.control = ArduinoSerial()
+        self.control.connect()
+        # self.control.send_command("00")
+        #arduino -------------------------------------------------
+        self.mainHandle.btn00.clicked.connect(self.send00)
+        self.mainHandle.btn01.clicked.connect(self.send01)
+        # PLC --------------------------------------------------
+        plc_ip = "192.168.0.1"  # Địa chỉ IP của PLC
+        rack = 0
+        slot = 1
+        db_number = 1  # Số DB (Data Block)
+        start = 0      # Offset bắt đầu
+        size = 2       # Kích thước dữ liệu (INT = 2 byte)
+        self.controlPLC = SiemensPLC(plc_ip, rack, slot)
+        self.controlPLC.connect()
+        # PLC --------------------------------------------------
         # Date and time -----------------------------------------
         self.mainHandle.dateTimeEdit.setDisplayFormat("yyyy-MM-dd HH:mm:ss")
         self.timer = QTimer(self.mainUI)
@@ -46,7 +64,7 @@ class UI():
         self.mainHandle.table_result.horizontalHeader().setSectionResizeMode(QtWidgets.QHeaderView.Stretch)
 
         # # Bảng giá trị -------------------------------------------
-
+    
     def loadMainForm(self, data):
         self.loginUI.hide()
         self.mainUI.show()
@@ -59,11 +77,23 @@ class UI():
         """Cập nhật ngày giờ trên QDateTimeEdit."""
         current_datetime = QDateTime.currentDateTime()
         self.mainHandle.dateTimeEdit.setDateTime(current_datetime)
+    # arduino -------------------------------------------------
+    def send00(self):
+        self.control.send_command("00")
+    def send01(self):
+        self.control.send_command("01")  
+    # arduino -------------------------------------------------
+    # PLC ----------------------------------------------------
+    def readPLC(self):
+        self.controlPLC.read_data(1,2,2)
+    def writePLC(self):
+        self.controlPLC.write_data(1,5,2)  
+    # PLC ----------------------------------------------------
     # camera ---------------------------------------------------
     def start_camera(self):
         """Khởi động camera và bắt đầu hiển thị hình ảnh."""
         if not self.cap:
-            self.cap = cv2.VideoCapture(0)  # Mở camera mặc định
+            self.cap = cv2.VideoCapture(1)
         self.timer.timeout.connect(self.update_frame)
         self.timer.start(30)  # Cập nhật mỗi 30ms
     def update_frame(self):
@@ -165,5 +195,5 @@ if __name__ == "__main__":
     app = QApplication([])
     
     ui = UI()
-
+    
     app.exec_()

@@ -1,29 +1,75 @@
 import serial
 import time
 
-# Cấu hình cổng serial (thay /dev/ttyUSB0 bằng COMx nếu trên Windows)
-arduino_port = "COM3"  # Ví dụ: COM3 hoặc /dev/ttyUSB0
-baud_rate = 9600       # Tốc độ baud phải khớp với Arduino
-timeout = 1            # Thời gian chờ khi không nhận dữ liệu
+class ArduinoSerial:
+    def __init__(self, port="COM5", baudrate=9600, timeout=1):
+        """
+        Khởi tạo đối tượng Serial kết nối với Arduino.
+        """
+        self.port = port
+        self.baudrate = baudrate
+        self.timeout = timeout
+        self.connection = None
 
-# Kết nối với Arduino
-ser = serial.Serial(arduino_port, baud_rate, timeout=timeout)
-print("Connected to Arduino:", arduino_port)
+    def connect(self):
+        """
+        Mở kết nối Serial.
+        """
+        try:
+            self.connection = serial.Serial(self.port, self.baudrate, timeout=self.timeout)
+            print(f"Đã kết nối tới {self.port} với tốc độ {self.baudrate}")
+            time.sleep(1)  # Chờ Arduino khởi động
+        except Exception as e:
+            print(f"Lỗi khi kết nối: {e}")
 
-time.sleep(2)  # Đợi Arduino khởi động
+    def send_command(self, command):
+        """
+        Gửi lệnh tới Arduino.
+        """
+        if self.connection and self.connection.is_open:
+            try:
+                self.connection.write((command + '\n').encode('utf-8'))  # Thêm ký tự xuống dòng
+                print(f"Đã gửi lệnh: {command}")
+            except Exception as e:
+                print(f"Lỗi khi gửi lệnh: {e}")
+        else:
+            print("Kết nối Serial chưa được mở.")
 
-# Gửi dữ liệu đến Arduino
-data_to_send = "Hello Arduino\n"
-ser.write(data_to_send.encode())
-print(f"Sent: {data_to_send.strip()}")
+    def read_response(self):
+        """
+        Đọc phản hồi từ Arduino.
+        """
+        if self.connection and self.connection.is_open:
+            try:
+                if self.connection.in_waiting > 0:
+                    response = self.connection.readline().decode('utf-8').strip()
+                    return response
+            except Exception as e:
+                print(f"Lỗi khi đọc phản hồi: {e}")
+        else:
+            print("Kết nối Serial chưa được mở.")
+        return None
 
-# Nhận dữ liệu từ Arduino
-while True:
-    data_received = ser.readline().decode().strip()  # Đọc một dòng dữ liệu
-    if data_received:
-        print(f"Received: {data_received}")
-        break
+    def close(self):
+        """
+        Đóng kết nối Serial.
+        """
+        if self.connection and self.connection.is_open:
+            self.connection.close()
+            print("Đã đóng kết nối Serial.")
+        else:
+            print("Kết nối Serial đã đóng hoặc chưa được mở.")
 
-# Đóng cổng serial khi xong
-ser.close()
-print("Serial connection closed.")
+# Sử dụng lớp ArduinoSerial
+if __name__ == "__main__":
+    arduino = ArduinoSerial(port="COM5", baudrate=9600)
+    arduino.connect()
+
+    # Gửi lệnh và đọc phản hồi
+    arduino.send_command("01")  # Gửi lệnh "00" đến Arduino
+    response = arduino.read_response()
+    if response:
+        print(f"Phản hồi từ Arduino: {response}")
+
+    # Đóng kết nối
+    arduino.close()

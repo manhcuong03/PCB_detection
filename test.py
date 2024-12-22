@@ -108,7 +108,7 @@ class UI():
         """Dự đoán ảnh, lưu kết quả và cập nhật bảng dữ liệu."""
 
         # Load YOLO model
-        weight = 'best.pt'
+        weight = 'best_nhom1.pt'
         model = YOLO(weight)
 
         # Predict on the image
@@ -122,13 +122,13 @@ class UI():
             predictions = result.boxes
             labels = predictions.cls.cpu().numpy()  # Labels
             for label in labels:
-                if label == 0:  # Giả sử 0 là IC
+                if label == 9:  # Giả sử 0 là IC
                     ic_count += 1
-                elif label == 1:  # Giả sử 1 là Resistor
+                elif label == 18:  # Giả sử 1 là Resistor
                     resistor_count += 1
                 elif label == 2:  # Giả sử 2 là Capacitor
                     capacitor_count += 1
-                elif label == 3:  # Giả sử 3 là Connector
+                elif label == 4:  # Giả sử 3 là Connector
                     connector_count += 1
 
             # Lưu ảnh sau khi dự đoán

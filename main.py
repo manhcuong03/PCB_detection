@@ -70,6 +70,12 @@ class Ui_MainWindow(object):
         font.setPointSize(14)
         self.btnCapture.setFont(font)
         self.btnCapture.setObjectName("btnCapture")
+        self.btn00 = QtWidgets.QPushButton(self.centralwidget)
+        self.btn00.setGeometry(QtCore.QRect(260, 50, 93, 28))
+        self.btn00.setObjectName("btn00")
+        self.btn01 = QtWidgets.QPushButton(self.centralwidget)
+        self.btn01.setGeometry(QtCore.QRect(370, 50, 93, 28))
+        self.btn01.setObjectName("btn01")
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 1091, 26))
@@ -89,6 +95,8 @@ class Ui_MainWindow(object):
         self.lbl_manual_cam_2.setText(_translate("MainWindow", "Result"))
         self.btnLogout.setText(_translate("MainWindow", "Logout"))
         self.btnCapture.setText(_translate("MainWindow", "Captures"))
+        self.btn00.setText(_translate("MainWindow", "00"))
+        self.btn01.setText(_translate("MainWindow", "01"))
 
 
 if __name__ == "__main__":

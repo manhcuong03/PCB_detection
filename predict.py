@@ -4,11 +4,11 @@ import cv2
 import os
 
 # Load a model
-weight = 'best.pt'
+weight = 'best2.pt'
 model = YOLO(weight)
 
 # Predict on the image
-results = model.predict('test2.jpg', show=False, save=True, save_dir='output')
+results = model.predict(r'D:\code\Final_xla\UI\captured_image_20241219_125456.jpg', show=False, save=True, save_dir='output')
 
 # Process and extract results
 for result in results:
@@ -16,7 +16,7 @@ for result in results:
     
     # Extract bounding boxes, confidence scores, and labels
     boxes = predictions.xyxy.cpu().numpy()  # Bounding boxes in [x1, y1, x2, y2]
-    scores = predictions.conf.cpu().numpy()  # Confidence scores
+    scores = predictions.conf.cpu().numpy()  # Confi/kaggle/input/dataset-m/test/images/captured_image_20241219_124104.jpgdence scores
     labels = predictions.cls.cpu().numpy()  # Labels
     
     print("Bounding Boxes:\n", boxes)
