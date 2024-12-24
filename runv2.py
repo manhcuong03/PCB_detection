@@ -55,6 +55,9 @@ class UI():
         # self.mainHandle.table_result.setItem(0, 1, QtWidgets.QTableWidgetItem("Capacitor"))
         # self.mainHandle.table_result.setItem(0, 2, QtWidgets.QTableWidgetItem("IC"))
 
+        # Load YOLO model
+        weight = 'best_mo.pt'
+        self.model = YOLO(weight)
         #     # Căn giữa tiêu đề cột
         # self.mainHandle.table_result.item(0, 0).setTextAlignment(Qt.AlignCenter)
         # self.mainHandle.table_result.item(0, 1).setTextAlignment(Qt.AlignCenter)
@@ -67,19 +70,13 @@ class UI():
 
         # # Bảng giá trị -------------------------------------------
         self.controlPLC.write_data(3,0,0)
-        self.previous_value = 0
     # hàm xử lý ảnh được thực hiện khi có giá trị data db3 0 2 từ 0 lên 1
     def startXla(self):
-    # Đọc giá trị hiện tại từ PLC
-        current_value = self.controlPLC.read_data(3, 0, 2)
-    
-    # Kiểm tra nếu giá trị thay đổi từ 0 lên 1
-        if self.previous_value == 0 and current_value == 1:
+        if self.controlPLC.read_data(3, 0, 2) == 1:
             # Thực hiện các lệnh khi có sự thay đổi
             self.controlPLC.write_data(3, 0, 0)
             self.capture_image()
-    # Cập nhật trạng thái trước đó
-        self.previous_value = current_value
+
     # các giao diện chính       
     def loadMainForm(self, data):
         self.loginUI.hide()
@@ -111,7 +108,10 @@ class UI():
         """Cập nhật hình ảnh từ camera lên QLabel."""
         ret, frame = self.cap.read()
         if ret:
-            self.startXla()
+            # self.startXla()
+            if self.controlPLC.read_data(3,0,2) == 1:
+                self.controlPLC.write_data(3,0,00)
+                self.capture_image()
             # Chuyển đổi hình ảnh từ BGR (OpenCV) sang RGB (Qt)
             frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
             h, w, ch = frame.shape
@@ -149,12 +149,8 @@ class UI():
     def predict_and_update_table(self, image_path):
         """Dự đoán ảnh, lưu kết quả và cập nhật bảng dữ liệu."""
 
-        # Load YOLO model
-        weight = 'best2.pt'
-        model = YOLO(weight)
-
         # Predict on the image
-        results = model.predict(image_path, show=False)
+        results = self.model.predict(image_path, show=False)
 
         # Initialize counters
         ic_count, capacitor_count, connector_count = 0, 0, 0
@@ -164,12 +160,12 @@ class UI():
             predictions = result.boxes
             labels = predictions.cls.cpu().numpy()  # Labels
             for label in labels:
-                if label == 0:  # IC
-                    ic_count += 1
-                elif label == 1:  # Capacitor
+                if label == 0:  # capacitor
                     capacitor_count += 1
-                elif label == 2:  # Connector
+                elif label == 1:  # connector
                     connector_count += 1
+                elif label == 2:  # ic
+                    ic_count += 1
 
             # Lưu ảnh sau khi dự đoán
             processed_image = result.plot()  # Vẽ kết quả dự đoán

@@ -4,11 +4,11 @@ import cv2
 import os
 
 # Load a model
-weight = 'best2.pt'
+weight = 'best_mo.pt'
 model = YOLO(weight)
 
 # Predict on the image
-results = model.predict(r'D:\code\Final_xla\UI\captured_image_20241219_125456.jpg', show=False, save=True, save_dir='output')
+results = model.predict(r'D:\code\Final_xla\UI\captured_image_20241219_124200_jpg.rf.1f1776f5e6a40c1e0299823e32d1b698.jpg', show=False, save=True, save_dir='output')
 
 # Process and extract results
 for result in results:

@@ -2,7 +2,7 @@ import serial
 import time
 
 class ArduinoSerial:
-    def __init__(self, port="COM5", baudrate=9600, timeout=1):
+    def __init__(self, port="COM10", baudrate=9600, timeout=2):
         """
         Khởi tạo đối tượng Serial kết nối với Arduino.
         """
@@ -18,7 +18,7 @@ class ArduinoSerial:
         try:
             self.connection = serial.Serial(self.port, self.baudrate, timeout=self.timeout)
             print(f"Đã kết nối tới {self.port} với tốc độ {self.baudrate}")
-            time.sleep(1)  # Chờ Arduino khởi động
+            time.sleep(2)  # Chờ Arduino khởi động
         except Exception as e:
             print(f"Lỗi khi kết nối: {e}")
 
@@ -62,7 +62,7 @@ class ArduinoSerial:
 
 # Sử dụng lớp ArduinoSerial
 if __name__ == "__main__":
-    arduino = ArduinoSerial(port="COM5", baudrate=9600)
+    arduino = ArduinoSerial(port="COM10", baudrate=9600)
     arduino.connect()
 
     # Gửi lệnh và đọc phản hồi
