@@ -22,11 +22,14 @@ class UI():
         self.loginHandle = LOGIN_HANDLE(self.loginUI)
         self.loginHandle.btnLogin.clicked.connect(lambda: self.loadMainForm(0))
         self.loginUI.show()
-
         self.mainHandle.btn00.clicked.connect(self.send00)
         self.mainHandle.btn01.clicked.connect(self.send01)
         self.mainHandle.btnConnectPLC.clicked.connect(self.connect_to_plc)
         self.mainHandle.btnConnectArduino.clicked.connect(self.connect_to_arduino)
+        self.mainHandle.btnOpenCam0.clicked.connect(self.opencam0)
+        self.mainHandle.btnOpenCam1.clicked.connect(self.opencam1)
+        self.mainHandle.btnOpenCam2.clicked.connect(self.opencam2)
+        self.videocapture = 0 # default camera 0
         # Date and time -----------------------------------------
         self.mainHandle.dateTimeEdit.setDisplayFormat("yyyy-MM-dd HH:mm:ss")
         self.timer = QTimer(self.mainUI)
@@ -118,10 +121,21 @@ class UI():
     # arduino -------------------------------------------------
 
     # camera ---------------------------------------------------
+    def opencam0(self):
+        self.videocapture = 0
+        self.stop_camera()
+        self.start_camera()
+    def opencam1(self):
+        self.videocapture = 1
+        self.stop_camera()
+        self.start_camera()
+    def opencam2(self):
+        self.videocapture = 2
+        self.stop_camera()
+        self.start_camera()
     def start_camera(self):
         """Khởi động camera và bắt đầu hiển thị hình ảnh."""
-        if not self.cap:
-            self.cap = cv2.VideoCapture(0)
+        self.cap = cv2.VideoCapture(self.videocapture)
         self.timer.timeout.connect(self.update_frame)
         self.timer.start(30)  # Cập nhật mỗi 30ms
     def update_frame(self):

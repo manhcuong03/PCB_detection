@@ -48,8 +48,8 @@
    <widget class="QLabel" name="lbl_manual_cam">
     <property name="geometry">
      <rect>
-      <x>90</x>
-      <y>100</y>
+      <x>30</x>
+      <y>150</y>
       <width>81</width>
       <height>41</height>
      </rect>
@@ -208,7 +208,7 @@ border-radius:16px;
    <widget class="QLabel" name="lbl_manual_cam_3">
     <property name="geometry">
      <rect>
-      <x>260</x>
+      <x>380</x>
       <y>50</y>
       <width>81</width>
       <height>41</height>
@@ -234,7 +234,7 @@ border-radius:16px;
    <widget class="QLabel" name="lbl_manual_cam_4">
     <property name="geometry">
      <rect>
-      <x>380</x>
+      <x>470</x>
       <y>50</y>
       <width>101</width>
       <height>41</height>
@@ -260,7 +260,7 @@ border-radius:16px;
    <widget class="QLabel" name="lbl_manual_cam_5">
     <property name="geometry">
      <rect>
-      <x>520</x>
+      <x>580</x>
       <y>50</y>
       <width>91</width>
       <height>41</height>
@@ -350,9 +350,9 @@ border-radius:16px;
    <widget class="QSplitter" name="splitter">
     <property name="geometry">
      <rect>
-      <x>230</x>
+      <x>370</x>
       <y>100</y>
-      <width>401</width>
+      <width>301</width>
       <height>41</height>
      </rect>
     </property>
@@ -362,6 +362,85 @@ border-radius:16px;
     <widget class="QPlainTextEdit" name="txtIC"/>
     <widget class="QPlainTextEdit" name="txtCapacitor"/>
     <widget class="QPlainTextEdit" name="txtConnector"/>
+   </widget>
+   <widget class="QLineEdit" name="lineEdit">
+    <property name="geometry">
+     <rect>
+      <x>70</x>
+      <y>0</y>
+      <width>671</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>16</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>! Please connect to Arduino and PLC before run System</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="btnOpenCam">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>80</y>
+      <width>181</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>Open Camera ID:</string>
+    </property>
+   </widget>
+   <widget class="QSplitter" name="splitter_4">
+    <property name="geometry">
+     <rect>
+      <x>210</x>
+      <y>90</y>
+      <width>121</width>
+      <height>33</height>
+     </rect>
+    </property>
+    <property name="orientation">
+     <enum>Qt::Horizontal</enum>
+    </property>
+    <widget class="QPushButton" name="btnOpenCam0">
+     <property name="font">
+      <font>
+       <pointsize>12</pointsize>
+      </font>
+     </property>
+     <property name="text">
+      <string>0</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="btnOpenCam1">
+     <property name="font">
+      <font>
+       <pointsize>12</pointsize>
+      </font>
+     </property>
+     <property name="text">
+      <string>1</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="btnOpenCam2">
+     <property name="font">
+      <font>
+       <pointsize>12</pointsize>
+      </font>
+     </property>
+     <property name="text">
+      <string>2</string>
+     </property>
+    </widget>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
